@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+html.dark {
+	color-scheme: dark;
+}
+
+body {
+	background-color: #0D1117;
+	color: #E2E8F0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
