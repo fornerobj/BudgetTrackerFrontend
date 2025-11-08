@@ -2,7 +2,7 @@ FROM oven/bun:1 AS build
 WORKDIR /app
 COPY . .
 RUN bun install
-RUN bun run build
+RUN bun run build --mode production
 
 # Stage 2: Serve
 FROM nginx:stable-alpine
