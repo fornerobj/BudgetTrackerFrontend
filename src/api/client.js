@@ -42,7 +42,9 @@ export async function apiRequest(
   path,
   { method = 'GET', body, token, headers = {}, timeout = DEFAULT_TIMEOUT_MS, signal } = {},
 ) {
-  const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
+  const url = path.startsWith('http')
+  ? path
+  : `${API_BASE.replace(/\/+$/, '')}/${path.replace(/^\/+/, '')}`;
   const isForm = isFormLike(body);
   const preparedBody =
     body === undefined
