@@ -2,17 +2,15 @@ import { Paper, Typography } from '@mui/material';
 import { PieChart } from '@mui/x-charts';
 import { useMemo } from 'react';
 
-export default function SpendingByCategoryPieChart({ transactions, dateRange }) {
+export default function SpendingByCategoryPieChart({ transactions }) {
   const data = useMemo(() => {
     const catTotals = {};
     transactions.forEach((t) => {
-      const d = new Date(t.date);
-      if (d >= dateRange.start && d <= dateRange.end && t.amount < 0) {
-        catTotals[t.category] = (catTotals[t.category] || 0) + -t.amount;
-      }
+      const catName = t.category?.name || 'Uncategorized';
+      catTotals[catName] = (catTotals[catName] || 0) + -t.amount;
     });
     return Object.entries(catTotals).map(([cat, value]) => ({ id: cat, value, label: cat }));
-  }, [transactions, dateRange]);
+  }, [transactions]);
 
   return (
     <Paper sx={{ p: 2, flex: 1 }}>
@@ -20,7 +18,7 @@ export default function SpendingByCategoryPieChart({ transactions, dateRange }) 
         Spending by Category
       </Typography>
       <PieChart
-        height={220}
+        height={400}
         series={[
           {
             data,

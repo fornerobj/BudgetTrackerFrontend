@@ -1,7 +1,6 @@
 const DEFAULT_TIMEOUT_MS = 15000;
 
-const runtimeOverride = localStorage.getItem('apiBase');
-const API_BASE = runtimeOverride || import.meta.env.VITE_API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 function withTimeout(ms, signal) {
   const ctrl = new AbortController();
@@ -25,6 +24,18 @@ function buildHeaders(extra, token, body) {
   }
   // If caller passed a body that's already string (assumed they set headers) leave as-is
   return base;
+}
+
+export function toQueryString(params) {
+  const esc = encodeURIComponent;
+  return Object.entries(params || {})
+    .filter(([, v]) => v !== undefined && v !== null)
+    .flatMap(([k, v]) =>
+      Array.isArray(v)
+        ? v.map((item) => `${esc(k)}=${esc(item)}`)
+        : [`${esc(k)}=${esc(v)}`]
+    )
+    .join('&');
 }
 
 export async function apiRequest(

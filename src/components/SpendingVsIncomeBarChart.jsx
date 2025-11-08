@@ -22,7 +22,7 @@ export default function SpendingVsIncomeBarChart({ transactions, dateRange }) {
         Spending vs. Income
       </Typography>
       <BarChart
-        height={220}
+        height={400}
         series={[
           { data: [spending], label: 'Spending', color: '#e57373' },
           { data: [income], label: 'Income', color: '#64b5f6' },

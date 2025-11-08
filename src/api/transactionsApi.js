@@ -1,4 +1,4 @@
-import { apiRequest } from './client.js';
+import { api, apiRequest } from './client.js';
 import { endpoints } from './endpoints.js';
 
 /**
@@ -25,4 +25,32 @@ export async function uploadTransactionsCsv(file) {
     body: form,
     // headers intentionally blank so fetch sets multipart boundary
   });
+}
+
+/**
+ * Fetch transactions with optional filters.
+ * @param {Object} filters - { categories, type, excluded, dateFrom, dateTo, amountMin, amountMax }
+ * @returns {Promise<Array>}
+ */
+export function fetchTransactions(filters) {
+  return api.get(endpoints.transactions(filters));
+}
+
+/**
+ * Update a transaction by ID.
+ * @param {number} id
+ * @param {Object} updateDto
+ * @returns {Promise<Object>}
+ */
+export function updateTransaction(id, updateDto) {
+  return api.patch(endpoints.transactionById(id), updateDto);
+}
+
+/**
+ * Delete a transaction by ID.
+ * @param {number} id
+ * @returns {Promise<Object>}
+ */
+export function deleteTransaction(id) {
+  return api.delete(endpoints.transactionById(id));
 }

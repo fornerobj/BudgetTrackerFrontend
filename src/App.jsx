@@ -6,6 +6,8 @@ import Header from './components/Header';
 import { useState } from 'react';
 import { Drawer, Button, Container } from '@mui/material';
 import DrawerList from './components/DrawerList';
+import Transactions from './pages/Transactions';
+import Budget from './pages/Budget';
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -35,6 +37,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path='/transactions' element={<Transactions />} />
+          <Route path='/budget' element={<Budget />} />
         </Routes>
       </Container>
     </div>

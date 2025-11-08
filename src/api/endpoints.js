@@ -1,10 +1,15 @@
+import { toQueryString } from "./client";
+
 export const endpoints = {
-    upload: () => '/upload',
-    getUncategorized: () => '/transactions/uncategorized',
-//   budgets: () => '/budgets',
-//   budget: (id) => `/budgets/${id}`,
-//   userProfile: () => '/users/me',
-//   transactions: (budgetId) => `/budgets/${budgetId}/transactions`,
+  upload: () => '/upload',
+  summary: () => '/summary',
+  transactions: (query) =>
+    query
+      ? `/transactions?${toQueryString(query)}`
+      : '/transactions',
+  transactionById: (id) => `/transactions/${id}`,
+  categories: () => '/categories',
+  categoryById: (id) => `/categories/${id}`,
 };
 
 // Example usage:

@@ -17,8 +17,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
-import { uploadTransactionsCsv } from '../api/uploadTransactions.js';
-import { TransactionsGrid } from '../components/TransactionsGrid.jsx';
+import { uploadTransactionsCsv } from '../api/transactionsApi.js';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -104,7 +103,6 @@ export default function Upload() {
             message: err?.message || 'Upload failed',
           },
         ]);
-        // Continue with next file
       }
     }
 
@@ -125,7 +123,6 @@ export default function Upload() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100dvh',
         gap: 2,
         p: 3,
       }}
@@ -325,33 +322,6 @@ export default function Upload() {
         <Typography variant="caption" color="text.secondary">
           Sequential upload avoids overloading the backend; you can parallelize later if needed.
         </Typography>
-      </Paper>
-
-      <Paper
-        sx={{
-          p: 2,
-          flexGrow: 1,
-          display: 'flex',
-          minHeight: 0,
-        }}
-        elevation={4}
-      >
-        <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, minHeight: 0 }}>
-          <Toolbar disableGutters sx={{ mb: 1 }}>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Transactions {transactions.length ? `(${transactions.length})` : ''}
-            </Typography>
-          </Toolbar>
-          <Box sx={{ flexGrow: 1, minHeight: 0, display: 'flex' }}>
-            <TransactionsGrid
-              rows={transactions}
-              loading={uploading}
-              onRowClick={(row) => console.log('Row clicked:', row)}
-              pageSize={25}
-              fill
-            />
-          </Box>
-        </Box>
       </Paper>
     </Box>
   );
