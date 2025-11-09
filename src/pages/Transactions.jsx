@@ -98,9 +98,13 @@ export default function Transactions() {
       width: 230,
       renderCell: (params) => (
         <Autocomplete
-          options={categories}
+          options={Array.isArray(categories) ? categories : []}
           getOptionLabel={(option) => option?.name || ''}
-          value={categories.find((cat) => cat.id === params.row.category?.id) || null}
+          value={
+            Array.isArray(categories)
+              ? categories.find((cat) => cat.id === params.row.category?.id) || null
+              : null
+          }
           onChange={(_, newValue) => {
             handleCategoryChange(params.row.id, newValue);
           }}
@@ -111,7 +115,7 @@ export default function Transactions() {
           disabled={loading}
           sx={{
             minWidth: 160,
-            height: 1, // 100% of cell height
+            height: 1,
           }}
         />
       ),
