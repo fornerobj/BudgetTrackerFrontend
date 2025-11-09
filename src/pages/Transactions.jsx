@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Autocomplete, Button, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { fetchCategories } from '../api/categoryApi';
 import { useDateRange } from '../utils/DateRangeProvider';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const CATEGORY_OPTIONS = [
   'Groceries',
@@ -24,11 +25,13 @@ export default function Transactions() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const { dateRange } = useDateRange();
+  const { getAccessTokenSilently } = useAuth0();
 
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await fetchTransactions({
+      const token = await getAccessTokenSilently();
+      const data = await fetchTransactions(token, {
         dateFrom: dateRange.start.toISOString().slice(0, 10),
         dateTo: dateRange.end.toISOString().slice(0, 10),
       });
@@ -38,20 +41,26 @@ export default function Transactions() {
     } finally {
       setLoading(false);
     }
-  }, [dateRange.start, dateRange.end]);
+  }, [dateRange.start, dateRange.end, getAccessTokenSilently]);
 
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   useEffect(() => {
-    fetchCategories().then(setCategories);
-  }, []);
+    async function loadCategories() {
+      setLoading(true);
+      const token = await getAccessTokenSilently();
+      fetchCategories(token).then(setCategories);
+    }
+    loadCategories();
+  }, [getAccessTokenSilently]);
 
   const handleToggleExcluded = async (id, currentValue) => {
     setLoading(true);
     try {
-      await updateTransaction(id, { excluded: !currentValue });
+      const token = await getAccessTokenSilently();
+      await updateTransaction(token, id, { excluded: !currentValue });
       await loadData();
     } catch (error) {
       console.error('Failed to update transaction:', error);
@@ -63,7 +72,8 @@ export default function Transactions() {
   const handleCategoryChange = async (id, newCategory) => {
     setLoading(true);
     try {
-      await updateTransaction(id, { categoryId: newCategory ? newCategory.id : -1 });
+      const token = await getAccessTokenSilently();
+      await updateTransaction(token, id, { categoryId: newCategory ? newCategory.id : -1 });
       await loadData();
     } catch (error) {
       console.error('Failed to update transaction:', error);

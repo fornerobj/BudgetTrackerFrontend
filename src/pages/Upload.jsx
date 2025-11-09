@@ -18,6 +18,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 import { uploadTransactionsCsv } from '../api/transactionsApi.js';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -38,6 +39,7 @@ export default function Upload() {
   const [currentIndex, setCurrentIndex] = useState(-1);
   const [errors, setErrors] = useState([]); // { name, message }
   const [globalError, setGlobalError] = useState(null);
+  const { getAccessTokenSilently } = useAuth0();
 
   const abortRef = useRef(null);
 
@@ -89,7 +91,8 @@ export default function Upload() {
       const file = files[i];
       setCurrentIndex(i);
       try {
-        const data = await uploadTransactionsCsv(file);
+        const token = await getAccessTokenSilently();
+        const data = await uploadTransactionsCsv(token, file);
         if (Array.isArray(data)) {
           setTransactions((prev) => [...prev, ...data]);
         } else {
@@ -109,7 +112,7 @@ export default function Upload() {
     setUploading(false);
     setCurrentIndex(-1);
     abortRef.current = null;
-  }, [files]);
+  }, [files, getAccessTokenSilently]);
 
   // Overall progress (0–100)
   const progress =

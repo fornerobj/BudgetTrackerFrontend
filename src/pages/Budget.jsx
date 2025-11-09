@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button, Stack, TextField } from '@mui/material';
 import { useDateRange } from '../utils/DateRangeProvider';
 import { fetchSummaries } from '../api/budgetApi';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Budget() {
   const [summaries, setSummaries] = useState([]);
@@ -14,16 +15,21 @@ export default function Budget() {
     budget: '',
   });
   const { dateRange } = useDateRange();
+  const { getAccessTokenSilently } = useAuth0();
 
-  const loadSummaries = useCallback(() => {
+  const loadSummaries = useCallback(async () => {
     setLoading(true);
-    fetchSummaries({
-      dateFrom: dateRange.start.toISOString().slice(0, 10),
-      dateTo: dateRange.end.toISOString().slice(0, 10),
-    })
+    const token = await getAccessTokenSilently();
+    fetchSummaries(
+      {
+        dateFrom: dateRange.start.toISOString().slice(0, 10),
+        dateTo: dateRange.end.toISOString().slice(0, 10),
+      },
+      token,
+    )
       .then(setSummaries)
       .finally(() => setLoading(false));
-  }, [dateRange]);
+  }, [dateRange, getAccessTokenSilently]);
 
   useEffect(() => {
     loadSummaries();
@@ -40,8 +46,9 @@ export default function Budget() {
     e.preventDefault();
     if (!newCategory.name) return;
     setLoading(true);
+    const token = await getAccessTokenSilently();
     try {
-      await createCategory({
+      await createCategory(token, {
         ...newCategory,
         budget: newCategory.budget ? parseFloat(newCategory.budget) : null,
       });

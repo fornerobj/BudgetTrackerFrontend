@@ -8,9 +8,28 @@ import { Drawer, Button, Container } from '@mui/material';
 import DrawerList from './components/DrawerList';
 import Transactions from './pages/Transactions';
 import Budget from './pages/Budget';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function App() {
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const [open, setOpen] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <span>Loading...</span>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    loginWithRedirect();
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <span>Redirecting to login...</span>
+      </div>
+    );
+  }
 
   const toggleDrawer = (open) => () => {
     setOpen(open);
@@ -37,8 +56,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/upload" element={<Upload />} />
-          <Route path='/transactions' element={<Transactions />} />
-          <Route path='/budget' element={<Budget />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/budget" element={<Budget />} />
         </Routes>
       </Container>
     </div>

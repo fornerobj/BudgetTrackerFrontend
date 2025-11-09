@@ -2,18 +2,18 @@ import { api } from "./client";
 import { endpoints } from "./endpoints";
 
 
-export function fetchCategories() {
-    return api.get(endpoints.categories());
+export function fetchCategories(token) {
+    return api.get(endpoints.categories(), { token });
 }
 
-export function createCategory(category) {
-    return api.post(endpoints.categories(), category);
+export function createCategory(token, category) {
+    return api.post(endpoints.categories(), category, { token });
 }
 
-export function updateCategory(id, update) {
-    return api.put(endpoints.categoryById(id), update);
+export function updateCategory(token, id, update) {
+    return api.put(endpoints.categoryById(id), update, { token });
 }
 
-export function deleteCategory(id) {
-    return api.delete(endpoints.categoryById(id));
+export function deleteCategory(token, id) {
+    return api.delete(endpoints.categoryById(id), { token });
 }
