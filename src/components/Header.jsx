@@ -31,7 +31,16 @@ export default function Header({ onMenuClick }) {
               Login
             </Button>
           ) : (
-            <Button color="inherit" onClick={() => logout({ returnTo: window.location.origin })}>
+            <Button
+              color="inherit"
+              onClick={() =>
+                logout({
+                  logoutParams: {
+                    returnTo: window.location.origin,
+                  },
+                })
+              }
+            >
               Logout
             </Button>
           )}
