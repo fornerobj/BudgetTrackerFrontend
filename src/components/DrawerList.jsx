@@ -3,14 +3,22 @@ import HomeIcon from '@mui/icons-material/Home';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
+
+function useGlobalQueryParams() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.toString();
+  return query ? `?${query}` : '';
+}
 
 export default function DrawerList({ onItemClick }) {
+  const query = useGlobalQueryParams();
+
   return (
     <List>
       <ListItemButton
         component={NavLink}
-        to="/"
+        to={`/${query}`}
         onClick={onItemClick}
         sx={{ '&.active': { bgcolor: 'action.selected' } }}
         end
@@ -22,7 +30,7 @@ export default function DrawerList({ onItemClick }) {
       </ListItemButton>
       <ListItemButton
         component={NavLink}
-        to="/upload"
+        to={`/upload${query}`}
         onClick={onItemClick}
         sx={{ '&.active': { bgcolor: 'action.selected' } }}
       >
@@ -33,7 +41,7 @@ export default function DrawerList({ onItemClick }) {
       </ListItemButton>
       <ListItemButton
         component={NavLink}
-        to="/transactions"
+        to={`/transactions${query}`}
         onClick={onItemClick}
         sx={{ '&.active': { bgcolor: 'action.selected' } }}
       >
@@ -44,7 +52,7 @@ export default function DrawerList({ onItemClick }) {
       </ListItemButton>
       <ListItemButton
         component={NavLink}
-        to="/budget"
+        to={`/budget${query}`}
         onClick={onItemClick}
         sx={{ '&.active': { bgcolor: 'action.selected' } }}
       >

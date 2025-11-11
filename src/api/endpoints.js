@@ -2,7 +2,10 @@ import { toQueryString } from "./client";
 
 export const endpoints = {
   upload: () => '/upload',
-  summary: () => '/summary',
+  summary: (query) =>
+    query
+      ? `/summary?${toQueryString(query)}`
+      : '/summary',
   transactions: (query) =>
     query
       ? `/transactions?${toQueryString(query)}`

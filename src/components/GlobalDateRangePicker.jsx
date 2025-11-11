@@ -13,13 +13,13 @@ export default function GlobalDateRangePicker() {
         <DatePicker
           label="Start"
           value={dateRange.start}
-          onChange={(newValue) => setDateRange({ ...dateRange, start: newValue })}
+          onChange={(newValue) => setDateRange(newValue, dateRange.end)}
           slotProps={{ textField: { size: 'small', variant: 'outlined' } }}
         />
         <DatePicker
           label="End"
           value={dateRange.end}
-          onChange={(newValue) => setDateRange({ ...dateRange, end: newValue })}
+          onChange={(newValue) => setDateRange(dateRange.start, newValue)}
           slotProps={{ textField: { size: 'small', variant: 'outlined' } }}
         />
       </Box>

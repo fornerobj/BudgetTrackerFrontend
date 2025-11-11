@@ -23,15 +23,17 @@ createRoot(document.getElementById('root')).render(
         redirect_uri: window.location.origin,
         audience: audience,
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
-      <DateRangeProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <BrowserRouter>
+      <BrowserRouter>
+        <DateRangeProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
             <App />
-          </BrowserRouter>
-        </ThemeProvider>
-      </DateRangeProvider>
+          </ThemeProvider>
+        </DateRangeProvider>
+      </BrowserRouter>
     </Auth0Provider>
   </StrictMode>,
 );

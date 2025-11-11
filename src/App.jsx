@@ -9,10 +9,15 @@ import DrawerList from './components/DrawerList';
 import Transactions from './pages/Transactions';
 import Budget from './pages/Budget';
 import { useAuth0 } from '@auth0/auth0-react';
+import { AuthenticationGuard } from './components/AuthenticationGuard';
 
 function App() {
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
   const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (open) => () => {
+    setOpen(open);
+  };
 
   if (isLoading) {
     return (
@@ -22,25 +27,14 @@ function App() {
     );
   }
 
-  if (!isAuthenticated) {
-    loginWithRedirect();
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <span>Redirecting to login...</span>
-      </div>
-    );
-  }
-
-  const toggleDrawer = (open) => () => {
-    setOpen(open);
-  };
-
   return (
     <div className="flex h-screen w-screen flex-col">
       <Header onMenuClick={toggleDrawer(true)} />
-      <Drawer open={open} onClose={toggleDrawer(false)}>
-        <DrawerList onItemClick={toggleDrawer(false)} />
-      </Drawer>
+      {isAuthenticated && (
+        <Drawer open={open} onClose={toggleDrawer(false)}>
+          <DrawerList onItemClick={toggleDrawer(false)} />
+        </Drawer>
+      )}
       <Container
         maxWidth={false}
         disableGutters
@@ -55,9 +49,9 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/transactions" element={<Transactions />} />
-          <Route path="/budget" element={<Budget />} />
+          <Route path="/upload" element={<AuthenticationGuard component={Upload} />} />
+          <Route path="/transactions" element={<AuthenticationGuard component={Transactions} />} />
+          <Route path="/budget" element={<AuthenticationGuard component={Budget} />} />
         </Routes>
       </Container>
     </div>
