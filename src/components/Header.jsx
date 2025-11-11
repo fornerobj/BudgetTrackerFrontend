@@ -2,9 +2,10 @@ import { AppBar, Box, Toolbar, IconButton, Typography, Button } from '@mui/mater
 import MenuIcon from '@mui/icons-material/Menu';
 import GlobalDateRangePicker from './GlobalDateRangePicker';
 import { useAuth0 } from '@auth0/auth0-react';
+import { UserMenu } from './UserMenu';
 
 export default function Header({ onMenuClick }) {
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
 
   return (
     <Box sx={{ flex: '0 0 auto' }}>
@@ -31,18 +32,7 @@ export default function Header({ onMenuClick }) {
               Login
             </Button>
           ) : (
-            <Button
-              color="inherit"
-              onClick={() =>
-                logout({
-                  logoutParams: {
-                    returnTo: window.location.origin,
-                  },
-                })
-              }
-            >
-              Logout
-            </Button>
+            <UserMenu />
           )}
         </Toolbar>
       </AppBar>
